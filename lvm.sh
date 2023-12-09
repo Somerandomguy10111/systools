@@ -54,4 +54,7 @@ for partition in $partitions; do
     sudo bash -c "pv < /dev/$partition > /dev/$vg_name/$lv_name"
 done
 
+echo "-> Activating LVM volumes"
+sudo vgchange -ay
+
 echo 'done'
