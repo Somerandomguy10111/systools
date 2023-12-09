@@ -57,4 +57,7 @@ done
 echo "-> Activating LVM volumes"
 sudo vgchange -ay
 
+echo "### Disks after process completion ###"
+sudo lsblk | grep -v loop
+
 echo 'done'
