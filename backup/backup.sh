@@ -1,4 +1,4 @@
-source ./lib/uuid_to_dev.sh
+source ../lib/uuid_to_dev.sh
 
 # Get logical name from UUID
 partition_uuid =
