@@ -2,6 +2,7 @@
 
 ## Creates an LVM copy of a "main disk" on a "target disk"
 
+# Input variables
 # Look up using: ls -l /dev/disk/by-id
 main_unique_id="nvme-nvme.c0a9-323332324536444430343632-435431303030503353534438-00000001"
 target_unique_id="nvme-nvme.c0a9-323332324536444337344542-435431303030503353534438-00000001"
