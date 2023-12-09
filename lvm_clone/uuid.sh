@@ -4,7 +4,7 @@
 #/dev/nvme0n1
 disk_id="nvme-nvme.c0a9-323332324536444430343632-435431303030503353534438-00000001"
 
-source ./other/uuid_to_dev.sh
+source ./lib/uuid_to_dev.sh
 disk=$(id_to_logical_name $disk_id)
 partitions=$(lsblk -lno NAME,TYPE "$disk" | grep 'part' | awk '{print $1}')
 
