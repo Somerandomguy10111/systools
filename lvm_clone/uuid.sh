@@ -25,7 +25,8 @@ for part in $partitions; do
     elif [ "$fstype" == "vfat" ]; then
         # For FAT32 (vfat), use mlabel
         sudo mlabel -s -n :: -i "$dev"
-        echo "->Assigned new UUID to $dev"
+        uuid=$(sudo blkid -s UUID -o value "$dev")
+        echo "->Assigned new UUID $uuid to $dev"
     else
         echo "->Unsupported filesystem type $fstype on $dev"
     fi
