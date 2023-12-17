@@ -1,5 +1,5 @@
 #!/bin/bash
-## Assigns random uuids and
+## Assigns random uuids to all partitions on specified disk
 
 #/dev/nvme0n1
 disk_id="nvme-nvme.c0a9-323332324536444430343632-435431303030503353534438-00000001"
