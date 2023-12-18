@@ -1,6 +1,6 @@
 source lib/name_resolution.sh
-BOOT_PARTITION="/dev/VG/lv_nvme0n1p1"
-FSYS_PARTITION="/dev/VG/lv_nvme0n1p2"
+BOOT_PARTITION="/dev/nvme0n1p1"
+FSYS_PARTITION="/dev/VG/lv_sda2"
 
 #---------------------#
 

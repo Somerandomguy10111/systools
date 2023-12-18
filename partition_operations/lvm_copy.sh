@@ -17,7 +17,11 @@ new_boot_dev_name="${target_disk}p1"
 echo "-> Cloning boot $boot_partition to $new_boot_dev_name of size $boot_size bytes"
 
 sudo parted /dev/nvme0n1 mklabel gpt
-sudo parted "$target_disk" mkpart primary fat32 1MiB $((boot_size / 1024 / 1024 + 1))
+#sudo parted "$target_disk" mkpart primary fat32 1MiB $((boot_size / 1024 / 1024 + 1))
+
+boot_partition_start=$(sudo parted "$boot_partition" -ms unit s print | awk -F: '/^1{print $2}')
+boot_partition_end=$(sudo parted "$boot_partition" -ms unit s print | awk -F: '/^1{print $3}')
+sudo parted "$target_disk" mkpart primary fat32 "$boot_partition_start" "$boot_partition_end"
 sudo bash -c "pv < $boot_partition > $new_boot_dev_name"
 
 new_lvm_part_name="${target_disk}p2"
