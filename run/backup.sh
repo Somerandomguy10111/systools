@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Input parameters
-
 # Backup parameters - adjust as needed
 SNAPSHOT_MOUNT_PATH="/mnt/snapshot"
 LOCAL_BACKUP_PATH="/"
