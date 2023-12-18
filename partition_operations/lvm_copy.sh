@@ -14,7 +14,7 @@ vg_name="VG"
 lv_name_prefix="lv"
 
 
-source lib/uuid_to_dev.sh
+source lib/name_resolution.sh
 #main_disk="nvme0n1"
 #target_disk="nvme1n1"
 main_disk=$(id_to_logical_name $main_unique_id)
