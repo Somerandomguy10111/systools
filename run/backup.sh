@@ -2,8 +2,7 @@
 
 # Backup parameters - adjust as needed
 SNAPSHOT_MOUNT_PATH="/mnt/snapshot"
-LOCAL_BACKUP_PATH="/"
-#REMOTE_BACKUP_BUCKET="gs://your-bucket-name/path"
+BASE_BACKUP_PATH="/mnt/daniel"
 
 #---------------------#
 # Internal parameters
@@ -25,8 +24,14 @@ for dir in "${EXCLUDE_DIRECTORIES[@]}"; do
     EXCLUDE_ARGS+=("--exclude=$dir")
 done
 
-# Local Backup from Snapshot
-rsync -aAXv "${EXCLUDE_ARGS[@]}" "$SNAPSHOT_MOUNT_PATH" "$LOCAL_BACKUP_PATH"
+# Find directories containing 'backup' under /mnt/daniel
+readarray -t BACKUP_PATHS < <(find "$BASE_BACKUP_PATH" -type d -name '*backup*')
+
+# Local Backup from Snapshot to each backup path
+for BACKUP_PATH in "${BACKUP_PATHS[@]}"; do
+    echo "Backing up to: $BACKUP_PATH"
+    rsync -aAXv "${EXCLUDE_ARGS[@]}" "$SNAPSHOT_MOUNT_PATH" "$BACKUP_PATH"
+done
 
 # Optionally unmount and remove snapshot after run
 umount "$SNAPSHOT_MOUNT_PATH"
