@@ -1,12 +1,27 @@
+#!/bin/bash
+source ../../devices.sh
+set -e
+
 
 # Initialize variables
-BOOT_PARTITION=$1
-FSYS_PARTITION=$2
-target_disk=$3
+BOOT_PARTITION=$boot0
+FSYS_PARTITION=$fsys0
+target_disk=$disk0
 
 #---------------------#
 
-echo "-> Recognized target_disk $target_disk, boot partition $BOOT_PARTITION and FSYS partition $FSYS_PARTITION"
+echo -e "### Grub re-installer: grub.sh: LAUNCH"
+
+#Recognized target_disk $target_disk, boot partition $BOOT_PARTITION and FSYS partition $FSYS_PARTITION.
+while true; do
+    read -p "-> Installing grub bootloader to $BOOT_PARTITION with $FSYS_PARTITION mounted to root both on disk $target_disk. Proceed? (y/n)" yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes (y) or no (n).";;
+    esac
+done
+
 
 #Update grub
 echo "-> Mounting the root partition"
@@ -35,4 +50,6 @@ sudo umount -l "$BOOT_PARTITION"
 sudo umount -l "$FSYS_PARTITION"
 
 echo "-> GRUB update process complete. Please reboot your system."
-echo "done"
+echo -e "### Grub re-installer: grub.sh: OK"
+echo ''
+
