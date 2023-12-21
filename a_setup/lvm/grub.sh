@@ -1,34 +1,42 @@
-source lib/name_resolution.sh
-BOOT_PARTITION="/dev/nvme0n1p1"
-FSYS_PARTITION="/dev/VG/lv_sda2"
+
+# Initialize variables
+BOOT_PARTITION=""
+FSYS_PARTITION=""
+target_disk='/dev/nvme0n1'
+
+# Process command line arguments
+for arg in "$@"
+do
+    case $arg in
+        --boot_partition=*)
+        BOOT_PARTITION="${arg#*=}"
+        shift
+        ;;
+        --fsys_partition=*)
+        FSYS_PARTITION="${arg#*=}"
+        shift
+        ;;
+        *)
+        echo "Unknown parameter: $arg"
+        exit 1
+        ;;
+    esac
+done
+
+
+# Check if both required arguments are provided
+if [[ -z "$BOOT_PARTITION" || -z "$FSYS_PARTITION" ]]; then
+    echo "Usage: $0 --boot_partition=/dev/sdX --fsys_partition=/dev/sdY"
+    exit 1
+fi
+
+# Rest of your script...
+#echo "Boot Partition: $BOOT_PARTITION"
+#echo "Filesystem Partition: $FSYS_PARTITION"
 
 #---------------------#
 
-get_physical_disk_from_lv() {
-    local dev=$1
-    # Extract VG from the LV path
-    vg_name=$(dmsetup info -c --noheadings -o vg_name "$dev")
-    local disk=$(sudo pvs --noheadings --select vg_name="$vg_name" -o pv_name)
-
-    echo "$disk"
-}
-
-
-get_disk_name() {
-    local dev=$1
-
-    if lvdisplay "$dev" &> /dev/null; then
-        echo $(get_physical_disk_from_lv "$dev")
-    else
-        echo $(lsblk -no PKNAME "$dev")
-    fi
-}
-
-
-#BOOT_PARTITION=$(id_to_logical_name $BOOT_ID)
-#FSYS_PARTITION=$(id_to_logical_name $FSYS_ID)
-disk=$(get_disk_name "$FSYS_PARTITION")
-echo "-> Recognized disk $disk, boot partition $BOOT_PARTITION and FSYS partition $FSYS_PARTITION"
+echo "-> Recognized target_disk $target_disk, boot partition $BOOT_PARTITION and FSYS partition $FSYS_PARTITION"
 
 #Update grub
 echo "-> Mounting the root partition"
@@ -44,8 +52,8 @@ echo ""
 sudo mount "$BOOT_PARTITION" /mnt/boot/efi
 
 # Chroot into the mounted filesystem and update boot
-echo "-> Reinstalling grub on $disk"
-sudo chroot /mnt /bin/bash -c "mount -t efivarfs none /sys/firmware/efi/efivars; grub-install --no-nvram $disk; update-grub; exit"
+echo "-> Reinstalling grub on $target_disk"
+sudo chroot /mnt /bin/bash -c "mount -t efivarfs none /sys/firmware/efi/efivars; grub-install --no-nvram $target_disk; update-grub; exit"
 
 echo "-> Updating fstab"
 sudo chroot /mnt /bin/bash -c "genfstab -U / | grep -v 'loop' > /etc/fstab"

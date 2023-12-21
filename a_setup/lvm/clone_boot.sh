@@ -7,8 +7,7 @@ boot_partition="/dev/sdb1"
 #lv_name_prefix="lv"
 
 #---------------------#
-sudo parted $target_disk mklabel gpt
-echo "-> Created new partition table on target disk $target_disk"
+
 
 boot_partition_size=$(sudo parted "$boot_partition" -ms unit MiB print | awk -F: '$1 == "1" {print ($3 - $2)}')
 new_boot_partition_start=1

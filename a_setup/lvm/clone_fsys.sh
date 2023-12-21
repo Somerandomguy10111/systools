@@ -1,16 +1,33 @@
 #!/bin/bash
-
 ## Creates an LVM copy of a "main disk" on a "target disk"
 
-# Input variables for boot and filesystem partitions
-target_disk='/dev/nvme0n1'
-boot_partition="/dev/sdb1"
-fsys_partition="/dev/sdb2"
+# Initialize variables
+target_disk=""
+fsys_partition=""
 
-vg_name="VG"
-lv_name_prefix="lv"
+# Process command line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --target_disk) target_disk="$2"; shift ;;
+        --fsys_partition) fsys_partition="$2"; shift ;;
+        *) echo "Unknown parameter: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+# Check if both required arguments are provided
+if [[ -z "$target_disk" || -z "$fsys_partition" ]]; then
+    echo "Usage: $0 --target_disk=/dev/sdX --fsys_partition=/dev/sdY"
+    exit 1
+fi
+
+# Rest of your script...
+echo "Target Disk: $target_disk"
+echo "Filesystem Partition: $fsys_partition"
 
 #---------------------#
+vg_name="VG"
+lv_name_prefix="lv"
 
 last_partition_end=$(sudo fdisk -l "$target_disk" | grep "^$target_disk" | awk '{print $3}' | sort -nr | head -n 1)
 last_partition_end_mib=$(( (last_partition_end + 1) * 512 / 1024 / 1024 ))
