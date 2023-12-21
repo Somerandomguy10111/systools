@@ -33,6 +33,6 @@ for BACKUP_PATH in "${BACKUP_PATHS[@]}"; do
     rsync -aAXv "${EXCLUDE_ARGS[@]}" "$SNAPSHOT_MOUNT_PATH" "$BACKUP_PATH"
 done
 
-# Optionally unmount and remove snapshot after run
+# Optionally unmount and remove snapshot after c_run
 umount "$SNAPSHOT_MOUNT_PATH"
 lvremove -f "/dev/ubuntu-vg/$SNAPSHOT_NAME"
