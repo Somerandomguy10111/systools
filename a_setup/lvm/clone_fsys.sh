@@ -2,30 +2,11 @@
 ## Creates an LVM copy of a "main disk" on a "target disk"
 
 # Initialize variables
-target_disk=""
-fsys_partition=""
-
-# Process command line arguments
-while [[ "$#" -gt 0 ]]; do
-    case $1 in
-        --target_disk) target_disk="$2"; shift ;;
-        --fsys_partition) fsys_partition="$2"; shift ;;
-        *) echo "Unknown parameter: $1"; exit 1 ;;
-    esac
-    shift
-done
-
-# Check if both required arguments are provided
-if [[ -z "$target_disk" || -z "$fsys_partition" ]]; then
-    echo "Usage: $0 --target_disk=/dev/sdX --fsys_partition=/dev/sdY"
-    exit 1
-fi
-
-# Rest of your script...
-echo "Target Disk: $target_disk"
-echo "Filesystem Partition: $fsys_partition"
+target_disk=$1
+fsys_partition=$2
 
 #---------------------#
+
 vg_name="VG"
 lv_name_prefix="lv"
 

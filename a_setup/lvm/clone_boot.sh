@@ -1,10 +1,5 @@
-# Input variables for boot and filesystem partitions
-target_disk='/dev/nvme0n1'
-boot_partition="/dev/sdb1"
-#fsys_partition="/dev/sdb2"
-
-#vg_name="VG"
-#lv_name_prefix="lv"
+target_disk=$1
+boot_partition=$2
 
 #---------------------#
 

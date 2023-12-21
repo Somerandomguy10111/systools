@@ -1,38 +1,8 @@
 
 # Initialize variables
-BOOT_PARTITION=""
-FSYS_PARTITION=""
-target_disk='/dev/nvme0n1'
-
-# Process command line arguments
-for arg in "$@"
-do
-    case $arg in
-        --boot_partition=*)
-        BOOT_PARTITION="${arg#*=}"
-        shift
-        ;;
-        --fsys_partition=*)
-        FSYS_PARTITION="${arg#*=}"
-        shift
-        ;;
-        *)
-        echo "Unknown parameter: $arg"
-        exit 1
-        ;;
-    esac
-done
-
-
-# Check if both required arguments are provided
-if [[ -z "$BOOT_PARTITION" || -z "$FSYS_PARTITION" ]]; then
-    echo "Usage: $0 --boot_partition=/dev/sdX --fsys_partition=/dev/sdY"
-    exit 1
-fi
-
-# Rest of your script...
-#echo "Boot Partition: $BOOT_PARTITION"
-#echo "Filesystem Partition: $FSYS_PARTITION"
+BOOT_PARTITION=$1
+FSYS_PARTITION=$2
+target_disk=$3
 
 #---------------------#
 
