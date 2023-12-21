@@ -38,6 +38,7 @@ disk1=$(id_to_name nvme-CT1000P3SSD8_2322E6DC74EB)
 boot0=$(id_to_name nvme-CT1000P3SSD8_2322E6DD0462_1-part1)
 fsys0=$(id_to_name nvme-CT1000P3SSD8_2322E6DD0462_1-part2)
 
+echo -e "### Device recognition: device.sh"
 echo -e "Recognized devices:\n->disk0 $disk0;\n->disk1 $disk1;\n->boot0 $boot0;\n->fsys0 $fsys0"
 
 boot1=$(id_to_name nvme-CT1000P3SSD8_2322E6DC74EB-part1)
@@ -45,3 +46,4 @@ fsys1=$(id_to_name dm-name-VG-fsys)
 echo -e "-> boot1 $boot1;\n->fsys1 $fsys1"
 
 
+echo -e "### Device recognition: device.sh: OK\n"
