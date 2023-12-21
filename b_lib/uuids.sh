@@ -1,13 +1,25 @@
 #!/bin/bash
-## Assigns random uuids to all partitions on specified disk
-
 source ../devices.sh
-
+set -e
 
 echo -e "### Random UUID assignment: uuid.sh: LAUNCH"
-echo "-> Input device: Disk $disk0"
+while true; do
+    read -p "-> Assigning random uuids to partitions on disk $disk0: Proceed? (y/n) " yn
+    case $yn in
+        [Yy]* ) break;;  # If the user enters "y" or "Y", exit the loop
+        [Nn]* ) exit;;   # If the user enters "n" or "N", exit the script
+        * ) echo "Please answer yes (y) or no (n).";;
+    esac
+done
 
-partitions=$(lsblk -lno NAME,TYPE "$disk0" | grep 'part' | awk '{print $1}')
+
+partitions=$(lsblk -lno NAME,TYPE $disk0 | grep 'part' | awk '{print $1}')
+# Check if the partitions variable is empty
+if [ -z "$partitions" ]; then
+    echo "Error: No partitions found or invalid input provided. Aborting ..."
+    echo -e "### Random UUID assignment: uuid.sh: FAILED"
+    exit 1
+fi
 
 for part in $partitions; do
     dev="/dev/$part"
