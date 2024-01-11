@@ -1,6 +1,23 @@
 #!/bin/bash
 
-USB_DEV="/dev/sdb2" # Replace with actual device
+# look the id through ls -l /dev/disk/by-id
+id_to_name() {
+    identifier=$1
+    logical_name=$(readlink -f /dev/disk/by-id/"$identifier")
+
+    full_lv_path=$(get_full_lv_path "$logical_name" 2> /dev/null)
+    if [ $? -eq 0 ]; then
+        echo "$full_lv_path"
+    else
+        echo "$logical_name"
+    fi
+}
+
+USB_ID="usb-USB_SanDisk_3.2Gen1_01016457574929dacf3edfba5a9b31fea6decbbf58b1759d540e5367e4c4eff5362e00000000000000000000288dd90800003400835581074eaeb250-0:0-part2"
+USB_DEV=$(id_to_name $USB_ID)
+
+echo "-> Recognized USB_DEV: $USB_DEV"
+
 HOME_DIR="/home/daniel"
 MOUNT_POINT="$HOME_DIR/protected"
 

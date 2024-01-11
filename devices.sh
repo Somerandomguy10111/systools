@@ -3,6 +3,7 @@
 
 
 # To find the logical name from a known identifier
+# look up id in /dev/disk/by-id
 id_to_name() {
     identifier=$1
     logical_name=$(readlink -f /dev/disk/by-id/"$identifier")
