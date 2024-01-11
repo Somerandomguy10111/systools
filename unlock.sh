@@ -22,7 +22,7 @@ MOUNT_POINT="$HOME_DIR/$NAME"
 
 echo "Enter pwd:"
 read -s pwd
-passcode=$(echo -n "pwd" | sha256sum | cut -d ' ' -f 1)
+passcode=$(echo -n "$pwd" | sha256sum | cut -d ' ' -f 1)
 
 #----------------------------------------------------------------------------
 
