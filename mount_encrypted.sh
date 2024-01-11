@@ -27,6 +27,7 @@ if [ ! -b "$USB_DEV" ]; then
 fi
 
 # Mount the device
+sudo umount "/dev/mapper/$NAME"
 sudo cryptsetup luksClose $NAME
 sudo cryptsetup luksOpen $USB_DEV $NAME
 sudo mount "/dev/mapper/$NAME" "$MOUNT_POINT"
