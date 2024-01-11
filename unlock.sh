@@ -13,7 +13,7 @@ function unlock-keyring ()
     export $(echo -n $1 | gnome-keyring-daemon --replace --unlock)
 }
 
-
+set +o history
 
 USB_ID="usb-USB_SanDisk_3.2Gen1_01016457574929dacf3edfba5a9b31fea6decbbf58b1759d540e5367e4c4eff5362e00000000000000000000288dd90800003400835581074eaeb250-0:0-part2"
 HOME_DIR="/home/daniel"
@@ -23,6 +23,17 @@ MOUNT_POINT="$HOME_DIR/$NAME"
 echo "Enter pwd:"
 read -s pwd
 passcode=$(echo -n "$pwd" | sha256sum | cut -d ' ' -f 1)
+unset pwd
+
+
+cleanup() {
+    echo "-> Performing cleanup tasks..."
+    set -o history # turn it back on
+    unset pwd passcode
+    echo done
+}
+trap cleanup EXIT
+
 
 #----------------------------------------------------------------------------
 
