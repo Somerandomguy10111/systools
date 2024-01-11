@@ -7,12 +7,28 @@ id_to_name() {
     echo "$logical_name"
 }
 
+# Linux unlock gnome keyring
+function unlock-keyring ()
+{
+    export $(echo -n $1 | gnome-keyring-daemon --replace --unlock)
+}
+
+
+
 USB_ID="usb-USB_SanDisk_3.2Gen1_01016457574929dacf3edfba5a9b31fea6decbbf58b1759d540e5367e4c4eff5362e00000000000000000000288dd90800003400835581074eaeb250-0:0-part2"
 HOME_DIR="/home/daniel"
 NAME="protected"
 MOUNT_POINT="$HOME_DIR/$NAME"
 
+echo "Enter pwd:"
+read -s pwd
+passcode=$(echo -n "pwd" | sha256sum | cut -d ' ' -f 1)
+
 #----------------------------------------------------------------------------
+
+echo "-> Unlocking keyring"
+unlock-keyring $passcode
+
 
 USB_DEV=$(id_to_name $USB_ID)
 echo "-> Recognized USB_DEV: $USB_DEV"
@@ -29,7 +45,9 @@ fi
 # Mount the device
 sudo umount "/dev/mapper/$NAME"
 sudo cryptsetup luksClose $NAME
-sudo cryptsetup luksOpen $USB_DEV $NAME
+echo -n "$passcode" | sudo cryptsetup luksOpen $USB_DEV $NAME
+unset passcode
+
 sudo mount "/dev/mapper/$NAME" "$MOUNT_POINT"
 
 echo "-> Opened encrypted drive $NAME"
