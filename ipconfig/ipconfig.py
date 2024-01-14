@@ -1,7 +1,5 @@
 from adapter import Adapter
-
 import subprocess
-
 
 
 def get_adapters() -> list[Adapter]:
@@ -15,7 +13,7 @@ def get_adapters() -> list[Adapter]:
     adapter_list : list[Adapter] = []
     sections = "".join(output.decode()).split("\n\n")
 
-    print("sections: ", sections)
+    # print("sections: ", sections)
 
     for section in sections:
         if section.strip():
@@ -28,4 +26,18 @@ def get_adapters() -> list[Adapter]:
 # Example usage
 for adapter in get_adapters():
     print()
+    print(adapter)
+
+
+if __name__ == "__main__":
+    adapter = Adapter(
+        technical_name="Ethernet Adapter",
+        adapter_type="Ethernet",
+        dns_suffix="example.com",
+        ipv4_address="192.168.1.100",
+        ipv6_address="2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+        subnet_mask="255.255.255.0",
+        default_gateway="192.168.1.1"
+    )
+
     print(adapter)

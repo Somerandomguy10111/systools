@@ -46,10 +46,22 @@ class Adapter:
         self.subnet_mask: Optional[str] = subnet_mask
         self.default_gateway: Optional[str] = default_gateway
 
-
+    def __str__(self):
+        indent = 2 * ' '
+        formatted_info = [
+            self.get_name(),
+            '',
+            f'{indent}{self.get_formatted_type()}',
+            f'{indent}{self.get_formatted_dns_suffix()}',
+            f'{indent}{self.get_formatted_ipv4()}',
+            f'{indent}{self.get_formatted_ipv6()}',
+            f'{indent}{self.get_formatted_subnet_mask()}',
+            f'{indent}{self.get_formatted_default_gateway()}'
+        ]
+        return "\n".join(formatted_info)
 
     def get_name(self):
-        friendly_name = self.get_friendly_name(self.name)
+        friendly_name = self.get_friendly_interface_name(self.name)
         return friendly_name
 
     def get_formatted_type(self):
@@ -65,24 +77,16 @@ class Adapter:
         return f"{self.get_formatted_label('IPv6 Address')}{self.ipv6_address}"
 
     def get_formatted_subnet_mask(self):
+        try:
+            the_int = int(self.subnet_mask)
+            self.subnet_mask = self.cidr_to_netmask(the_int)
+        except:
+            return ''
         return f"{self.get_formatted_label('Subnet Mask')}{self.subnet_mask}"
 
     def get_formatted_default_gateway(self):
         return f"{self.get_formatted_label('Default Gateway')}{self.default_gateway}"
 
-    def __str__(self):
-        indent = 2 * ' '
-        formatted_info = [
-            self.get_name(),
-            '',
-            f'{indent}{self.get_formatted_type()}',
-            f'{indent}{self.get_formatted_dns_suffix()}',
-            f'{indent}{self.get_formatted_ipv4()}',
-            f'{indent}{self.get_formatted_ipv6()}',
-            f'{indent}{self.get_formatted_subnet_mask()}',
-            f'{indent}{self.get_formatted_default_gateway()}'
-        ]
-        return "\n".join(formatted_info)
 
     @staticmethod
     def get_formatted_label(label):
@@ -93,7 +97,7 @@ class Adapter:
         return adjusted_label
 
     @staticmethod
-    def get_friendly_name(interface_name : str) -> str:
+    def get_friendly_interface_name(interface_name : str) -> str:
         if interface_name.startswith('en'):
             return "Ethernet Adapter"
         elif interface_name.startswith('wl'):
@@ -115,16 +119,9 @@ class Adapter:
         else:
             return f"Unknown Adapter ({interface_name})"
 
+    @staticmethod
+    def cidr_to_netmask(cidr_bits: int) -> str:
+        mask = ('1' * cidr_bits).ljust(32, '0')
+        octets = [str(int(mask[i:i + 8], 2)) for i in range(0, 32, 8)]
+        return '.'.join(octets)
 
-# if __name__ == "__main__":
-#     adapter = Adapter(
-#         technical_name="Ethernet Adapter",
-#         adapter_type="Ethernet",
-#         dns_suffix="example.com",
-#         ipv4_address="192.168.1.100",
-#         ipv6_address="2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-#         subnet_mask="255.255.255.0",
-#         default_gateway="192.168.1.1"
-#     )
-#
-#     print(adapter)
