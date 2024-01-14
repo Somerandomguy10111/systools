@@ -49,34 +49,38 @@ class Adapter:
     def __str__(self):
         indent = 2 * ' '
         formatted_info = [
-            self.get_name(),
+            self.get_heading(),
             '',
-            f'{indent}{self.get_formatted_type()}',
-            f'{indent}{self.get_formatted_dns_suffix()}',
-            f'{indent}{self.get_formatted_ipv4()}',
-            f'{indent}{self.get_formatted_ipv6()}',
-            f'{indent}{self.get_formatted_subnet_mask()}',
-            f'{indent}{self.get_formatted_default_gateway()}'
+            f'{indent}{self.get_interface_type()}' if self.name is not None else '',
+            f'{indent}{self.get_dns_suffix()}' if self.dns_suffix is not None else '',
+            f'{indent}{self.get_ipv4_addr()}' if self.ipv4_address is not None else '',
+            f'{indent}{self.get_ipv6_addr()}' if self.ipv6_address is not None else '',
+            f'{indent}{self.get_subnet_mask()}' if self.subnet_mask is not None else '',
+            f'{indent}{self.get_formatted_default_gateway()}' if self.default_gateway is not None else ''
         ]
-        return "\n".join(formatted_info)
 
-    def get_name(self):
+
+        non_empty_info = filter(lambda x: x != '', formatted_info)
+
+        return "\n".join(non_empty_info)
+
+    def get_heading(self):
         friendly_name = self.get_friendly_interface_name(self.name)
         return friendly_name
 
-    def get_formatted_type(self):
+    def get_interface_type(self):
         return f"{self.get_formatted_label('Type')}{self.adapter_type}"
 
-    def get_formatted_dns_suffix(self):
+    def get_dns_suffix(self):
         return f"{self.get_formatted_label('DNS Suffix')}{self.dns_suffix}"
 
-    def get_formatted_ipv4(self):
+    def get_ipv4_addr(self):
         return f"{self.get_formatted_label('IPv4 Address')}{self.ipv4_address}"
 
-    def get_formatted_ipv6(self):
+    def get_ipv6_addr(self):
         return f"{self.get_formatted_label('IPv6 Address')}{self.ipv6_address}"
 
-    def get_formatted_subnet_mask(self):
+    def get_subnet_mask(self):
         try:
             the_int = int(self.subnet_mask)
             self.subnet_mask = self.cidr_to_netmask(the_int)
