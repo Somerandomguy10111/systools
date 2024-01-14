@@ -28,7 +28,7 @@ class Adapter:
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        technical_name: Optional[str] = None,
         adapter_type: Optional[str] = None,
         dns_suffix: Optional[str] = None,
         ipv4_address: Optional[str] = None,
@@ -36,7 +36,7 @@ class Adapter:
         subnet_mask: Optional[str] = None,
         default_gateway: Optional[str] = None
     ) -> None:
-        self.name: Optional[str] = name
+        self.name: Optional[str] = technical_name
         self.adapter_type: Optional[str] = adapter_type
         self.dns_suffix: Optional[str] = dns_suffix
         self.ipv4_address: Optional[str] = ipv4_address
@@ -46,8 +46,9 @@ class Adapter:
 
 
 
-    def get_formatted_name(self):
-        return f"{self.get_formatted_label('Name')}{self.name}"
+    def get_name(self):
+        friendly_name = self.get_friendly_name(self.name)
+        return friendly_name
 
     def get_formatted_type(self):
         return f"{self.get_formatted_label('Type')}{self.adapter_type}"
@@ -68,14 +69,16 @@ class Adapter:
         return f"{self.get_formatted_label('Default Gateway')}{self.default_gateway}"
 
     def __str__(self):
+        indent = 2 * ' '
         formatted_info = [
-            self.get_formatted_name(),
-            self.get_formatted_type(),
-            self.get_formatted_dns_suffix(),
-            self.get_formatted_ipv4(),
-            self.get_formatted_ipv6(),
-            self.get_formatted_subnet_mask(),
-            self.get_formatted_default_gateway()
+            self.get_name(),
+            '',
+            f'{indent}{self.get_formatted_type()}',
+            f'{indent}{self.get_formatted_dns_suffix()}',
+            f'{indent}{self.get_formatted_ipv4()}',
+            f'{indent}{self.get_formatted_ipv6()}',
+            f'{indent}{self.get_formatted_subnet_mask()}',
+            f'{indent}{self.get_formatted_default_gateway()}'
         ]
         return "\n".join(formatted_info)
 
@@ -87,10 +90,33 @@ class Adapter:
         adjusted_label = f"{label}{dotted_padding}"[:target_size] + " : "
         return adjusted_label
 
+    @staticmethod
+    def get_friendly_name(interface_name : str) -> str:
+        if interface_name.startswith('en'):
+            return "Ethernet Adapter"
+        elif interface_name.startswith('wl'):
+            return "Wireless LAN Adapter"
+        elif interface_name.startswith('virbr'):
+            return "Virtual Bridge Interface"
+        elif interface_name.startswith('veth'):
+            return "Virtual Ethernet Interface"
+        elif interface_name.startswith('tun') or interface_name.startswith('tap'):
+            return "VPN Tunnel Interface"
+        elif interface_name.startswith('bond'):
+            return "Bonding Interface"
+        elif '.' in interface_name:
+            return "VLAN Interface"
+        elif interface_name == 'lo':
+            return "Loopback Interface"
+        elif interface_name.startswith('br'):
+            return "Bridge Interface"
+        else:
+            return f"Unknown Adapter ({interface_name})"
+
 
 if __name__ == "__main__":
     adapter = Adapter(
-        name="Ethernet Adapter",
+        technical_name="Ethernet Adapter",
         adapter_type="Ethernet",
         dns_suffix="example.com",
         ipv4_address="192.168.1.100",
