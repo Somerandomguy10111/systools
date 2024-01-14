@@ -1,24 +1,6 @@
 from adapter import Adapter
 
 import subprocess
-import re
-
-def get_network_adapters():
-    result = subprocess.run(['ip', 'link', 'show'], stdout=subprocess.PIPE)
-    output = result.stdout.decode('utf-8')
-
-    regex = r"(\d+): (\w+):.*state (\w+)"
-    matches = re.finditer(regex, output, re.MULTILINE)
-
-    adapters = []
-    for match in matches:
-        interface = match.group(2)
-        state = match.group(3)
-        friendly_name = translate_interface_name(interface)
-        adapters.append((friendly_name, state))
-
-    return adapters
-
 
 
 
@@ -32,6 +14,9 @@ def get_adapters() -> list[Adapter]:
 
     adapter_list : list[Adapter] = []
     sections = "".join(output.decode()).split("\n\n")
+
+    print("sections: ", sections)
+
     for section in sections:
         if section.strip():
             new_adapter = Adapter.from_nmcli_output(section)

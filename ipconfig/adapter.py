@@ -23,6 +23,8 @@ class Adapter:
                 the_adapter.default_gateway = value
             elif key == "IP6.ADDRESS[1]":
                 the_adapter.ipv6_address = value.split('/')[0]
+            elif key == "IP4.DOMAIN[1]":
+                the_adapter.dns_suffix = value
 
         return the_adapter
 
@@ -114,15 +116,15 @@ class Adapter:
             return f"Unknown Adapter ({interface_name})"
 
 
-if __name__ == "__main__":
-    adapter = Adapter(
-        technical_name="Ethernet Adapter",
-        adapter_type="Ethernet",
-        dns_suffix="example.com",
-        ipv4_address="192.168.1.100",
-        ipv6_address="2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-        subnet_mask="255.255.255.0",
-        default_gateway="192.168.1.1"
-    )
-
-    print(adapter)
+# if __name__ == "__main__":
+#     adapter = Adapter(
+#         technical_name="Ethernet Adapter",
+#         adapter_type="Ethernet",
+#         dns_suffix="example.com",
+#         ipv4_address="192.168.1.100",
+#         ipv6_address="2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+#         subnet_mask="255.255.255.0",
+#         default_gateway="192.168.1.1"
+#     )
+#
+#     print(adapter)
