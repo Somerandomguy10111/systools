@@ -1,3 +1,5 @@
+from adapter import Adapter
+
 import subprocess
 import re
 
@@ -40,10 +42,25 @@ def translate_interface_name(interface_name):
         return f"Unknown Adapter ({interface_name})"
 
 
+def get_adapters() -> list[Adapter]:
+    command = "nmcli device show"
+    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, error = process.communicate()
 
-def display_adapters(adapters):
-    for interface, state in adapters:
-        print(f"Adapter: {interface}, State: {state}")
+    if error:
+        raise Exception(f"Error executing nmcli: {error.decode()}")
 
-adapters = get_network_adapters()
-display_adapters(adapters)
+    adapter_list : list[Adapter] = []
+    sections = "".join(output.decode()).split("\n\n")
+    for section in sections:
+        if section.strip():
+            new_adapter = Adapter.from_nmcli_output(section)
+            adapter_list.append(new_adapter)
+
+
+    return adapter_list
+
+# Example usage
+for adapter in get_adapters():
+    print()
+    print(adapter)

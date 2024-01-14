@@ -1,21 +1,49 @@
+from __future__ import annotations
+from typing import Optional
+
 class Adapter:
+
+    @classmethod
+    def from_nmcli_output(cls,section: str) -> Adapter:
+        the_adapter = Adapter()
+        for line in section.split('\n'):
+            if ':' not in line:
+                continue
+            key, value = line.split(':', 1)
+            value = value.strip()
+
+            if key == "GENERAL.DEVICE":
+                the_adapter.name = value
+            elif key == "GENERAL.TYPE":
+                the_adapter.adapter_type = value
+            elif key == "IP4.ADDRESS[1]":
+                the_adapter.ipv4_address = value.split('/')[0]
+                the_adapter.subnet_mask = value.split('/')[1] if '/' in value else None
+            elif key == "IP4.GATEWAY":
+                the_adapter.default_gateway = value
+            elif key == "IP6.ADDRESS[1]":
+                the_adapter.ipv6_address = value.split('/')[0]
+
+        return the_adapter
+
     def __init__(
         self,
-        name: str,
-        adapter_type: str,
-        dns_suffix: str,
-        ipv4_address: str,
-        ipv6_address: str,
-        subnet_mask: str,
-        default_gateway: str
+        name: Optional[str] = None,
+        adapter_type: Optional[str] = None,
+        dns_suffix: Optional[str] = None,
+        ipv4_address: Optional[str] = None,
+        ipv6_address: Optional[str] = None,
+        subnet_mask: Optional[str] = None,
+        default_gateway: Optional[str] = None
     ) -> None:
-        self.name: str = name
-        self.adapter_type: str = adapter_type
-        self.dns_suffix: str = dns_suffix
-        self.ipv4_address: str = ipv4_address
-        self.ipv6_address: str = ipv6_address
-        self.subnet_mask: str = subnet_mask
-        self.default_gateway: str = default_gateway
+        self.name: Optional[str] = name
+        self.adapter_type: Optional[str] = adapter_type
+        self.dns_suffix: Optional[str] = dns_suffix
+        self.ipv4_address: Optional[str] = ipv4_address
+        self.ipv6_address: Optional[str] = ipv6_address
+        self.subnet_mask: Optional[str] = subnet_mask
+        self.default_gateway: Optional[str] = default_gateway
+
 
 
     def get_formatted_name(self):
@@ -60,15 +88,15 @@ class Adapter:
         return adjusted_label
 
 
-# Example usage:
-adapter = Adapter(
-    name="Ethernet Adapter",
-    adapter_type="Ethernet",
-    dns_suffix="example.com",
-    ipv4_address="192.168.1.100",
-    ipv6_address="2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-    subnet_mask="255.255.255.0",
-    default_gateway="192.168.1.1"
-)
+if __name__ == "__main__":
+    adapter = Adapter(
+        name="Ethernet Adapter",
+        adapter_type="Ethernet",
+        dns_suffix="example.com",
+        ipv4_address="192.168.1.100",
+        ipv6_address="2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+        subnet_mask="255.255.255.0",
+        default_gateway="192.168.1.1"
+    )
 
-print(adapter)
+    print(adapter)
