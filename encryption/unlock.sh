@@ -56,12 +56,13 @@ fi
 # Mount the device
 sudo umount "/dev/mapper/$NAME"
 sudo cryptsetup luksClose $NAME
+
+echo "-> Opening encrypted drive $NAME"
+
 echo -n "$passcode" | sudo cryptsetup luksOpen $USB_DEV $NAME
 unset passcode
 
 sudo mount "/dev/mapper/$NAME" "$MOUNT_POINT"
-
-echo "-> Opened encrypted drive $NAME"
 
 # Change ownership and permissions
 sudo chown -R daniel:daniel $MOUNT_POINT
