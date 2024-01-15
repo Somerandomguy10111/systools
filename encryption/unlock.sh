@@ -10,7 +10,7 @@ id_to_name() {
 # Linux unlock gnome keyring
 function unlock-keyring ()
 {
-    export $(echo -n $1 | gnome-keyring-daemon --replace --unlock)
+     export $(echo -n $1 | gnome-keyring-daemon --replace --unlock --daemonize)
 }
 
 set +o history
