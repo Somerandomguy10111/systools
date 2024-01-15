@@ -17,7 +17,7 @@ set +o history
 
 USB_ID="usb-USB_SanDisk_3.2Gen1_01016457574929dacf3edfba5a9b31fea6decbbf58b1759d540e5367e4c4eff5362e00000000000000000000288dd90800003400835581074eaeb250-0:0-part2"
 HOME_DIR="/home/daniel"
-NAME="protected"
+NAME=".protected"
 MOUNT_POINT="$HOME_DIR/$NAME"
 
 echo "Enter pwd:"
@@ -71,7 +71,7 @@ sudo chmod 755 $MOUNT_POINT
 echo "-> Mounted encrypted drive at: $MOUNT_POINT"
 
 # Create an array of directories in the mount point
-dir_list=($(find $MOUNT_POINT -maxdepth 1 -type d))
+dir_list=($(find $MOUNT_POINT -maxdepth 1 -type d ! -name "lost+found"))
 
 echo "-> Found directories $dis_list"
 
