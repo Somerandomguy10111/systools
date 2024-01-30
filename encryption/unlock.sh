@@ -8,9 +8,14 @@ id_to_name() {
 }
 
 # Linux unlock gnome keyring
-function unlock-keyring ()
-{
-     export $(echo -n $1 | gnome-keyring-daemon --replace --unlock --daemonize)
+function unlock-keyring () {
+    export $(echo -n $1 | gnome-keyring-daemon --replace --unlock --daemonize)
+
+    if [ "$(secret-tool lookup service check_service)" = "0000" ]; then
+        echo "Unlocked keyring"
+    else
+        echo "Failed to unlock keyring"
+    fi
 }
 
 set +o history
