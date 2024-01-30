@@ -12,9 +12,9 @@ function unlock-keyring () {
     export $(echo -n $1 | gnome-keyring-daemon --replace --unlock --daemonize)
 
     if [ "$(secret-tool lookup service check_service)" = "0000" ]; then
-        echo "Unlocked keyring"
+        echo "-> successfully unlocked keyring!"
     else
-        echo "Failed to unlock keyring"
+        echo "-> Failed to unlock keyring!"
     fi
 }
 
@@ -25,7 +25,7 @@ HOME_DIR="/home/daniel"
 NAME=".protected"
 MOUNT_POINT="$HOME_DIR/$NAME"
 
-echo "Enter pwd:"
+echo "->Enter pwd:"
 read -s pwd
 passcode=$(echo -n "$pwd" | sha256sum | cut -d ' ' -f 1)
 unset pwd
