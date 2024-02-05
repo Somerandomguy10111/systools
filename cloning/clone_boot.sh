@@ -1,8 +1,7 @@
-target_disk=$1
-boot_partition=$2
+source_disk=$disk0
+target_disk=$disk1
 
 #---------------------#
-
 
 boot_partition_size=$(sudo parted "$boot_partition" -ms unit MiB print | awk -F: '$1 == "1" {print ($3 - $2)}')
 new_boot_partition_start=1
@@ -18,3 +17,6 @@ echo "-> Created new boot partition $new_boot_dev_name of size $boot_partition_s
 #sudo bash -c "pv < $boot_partition > $new_boot_dev_name"
 echo "-> Cloned $boot_partition to $new_boot_dev_name"
 echo "done"
+
+
+
