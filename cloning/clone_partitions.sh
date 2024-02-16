@@ -2,8 +2,6 @@ target_disk=$disk1
 boot_partition=$boot0
 fsys_partition=$fsys0
 
-echo $disk1
-
 read -p "-> Attempted cloning of boot partition $boot_partition and fsys partition $fsys_partition onto $target_disk. Proceed (y/n)?" confirmation
 if [ "$confirmation" != "y" ]; then
     echo "Operation aborted."

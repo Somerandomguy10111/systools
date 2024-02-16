@@ -2,7 +2,6 @@
 source ../../devices.sh
 set -e
 
-
 # Initialize variables
 BOOT_PARTITION=$boot0
 FSYS_PARTITION=$fsys0
