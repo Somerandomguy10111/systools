@@ -4,6 +4,13 @@ Development objective:
 These functionalities would probably work best if at least some of them were bundled in a GUI.
 Where you can select the devices with dropdown, then click a button to perform the action.
 
+## requirements
+```
+sudo apt-get install uuid-runtime
+sudo apt-get install arch-install-scripts
+sudo apt-get install rclone
+```
+
 ## cloning
 
 ## backups
