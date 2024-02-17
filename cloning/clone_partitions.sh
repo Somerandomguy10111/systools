@@ -1,3 +1,6 @@
+#!/bin/bash
+source ../devices.sh
+
 target_disk=$disk1
 boot_partition=$boot0
 fsys_partition=$fsys0

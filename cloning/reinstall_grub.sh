@@ -1,5 +1,5 @@
 #!/bin/bash
-source ../../devices.sh
+source ../devices.sh
 set -e
 
 # Initialize variables
