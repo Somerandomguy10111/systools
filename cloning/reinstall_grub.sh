@@ -3,9 +3,9 @@ source ../devices.sh
 set -e
 
 # Initialize variables
-BOOT_PARTITION=$boot0
-FSYS_PARTITION=$fsys0
-target_disk=$disk0
+BOOT_PARTITION=$boot2
+FSYS_PARTITION=$fsys2
+target_disk=$disk2
 
 #---------------------#
 

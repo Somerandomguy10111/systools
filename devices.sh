@@ -34,26 +34,30 @@ get_full_lv_path() {
 
 disk0_id=nvme-CT1000P3SSD8_2322E6DD0462
 disk1_id=nvme-CT1000P3SSD8_2322E6DC74EB
+disk2_id=usb-SSK_SD30_0_1TB_ABCDEFA75101-0:0
 disk0_p1="$disk0_id-part1"
 disk0_p2="$disk0_id-part2"
 disk1_p1="$disk1_id-part2"
 disk1_p2="$disk1_id-part2"
+disk2_p1="$disk2_id-part1"
+disk2_p2="$disk2_id-part2"
 
 
 export disk0=$(id_to_name $disk0_id)
 export disk1=$(id_to_name $disk1_id)
+export disk2=$(id_to_name $disk2_id)
 
 export boot0=$(id_to_name $disk0_p1)
 export fsys0=$(id_to_name $disk0_p2)
 
 echo -e "### Device recognition: device.sh"
-#export $disk0 $disk1 $boot0 $fsys0
 
-boot1=$(id_to_name $disk1_p1)
-fsys1=$(id_to_name $disk1_p2)
-echo -e "->Recognized disks:\ndisk0 $disk0;\ndisk1 $disk1;\n"
-echo -e "->Recognized partitions:\nboot0 $boot0;\nfsys0 $fsys0;\nboot1 $boot1; \nfsys1 $fsys1\n"
-
+export boot1=$(id_to_name $disk1_p1)
+export fsys1=$(id_to_name $disk1_p2)
+export boot2=$(id_to_name $disk2_p1)
+export fsys2=$(id_to_name $disk2_p2)
+echo -e "->Recognized disks:\ndisk0 $disk0;\ndisk1 $disk1;\ndisk2 $disk2"
+echo -e "->Recognized partitions:\nboot0 $boot0;\nfsys0 $fsys0;\nboot1 $boot1; \nfsys1 $fsys1; \nboot2 $boot2; \nfsys2 $fsys2\n"
 
 echo -e "### Device recognition: device.sh: OK\n"
 echo -e "done"
